@@ -31,3 +31,22 @@ The codebase is structured following DRY (Don't Repeat Yourself) principles and 
 2. Install Node dependencies:
    ```bash
    npm install
+   ```
+3. Install Playwright browsers:
+   ```bash
+   npx playwright install
+   ```
+4. Start the application locally (requires Angular CLI):
+   ```bash
+   npm start
+   ```
+5. In a new terminal window, run the tests using the Playwright UI mode:
+   ```bash
+   npx playwright test --ui
+   ```
+
+## 📊 Reporting
+Upon execution, Playwright generates an interactive HTML report featuring screenshots, video recordings, and a Trace Viewer for deep-dive debugging:
+```bash
+npx playwright show-report
+```
