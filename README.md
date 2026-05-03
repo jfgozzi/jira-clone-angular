@@ -1,33 +1,33 @@
 # 🧪 E2E Test Automation - Jira Clone (Playwright)
 
-Este repositorio contiene una suite completa de pruebas End-to-End (E2E) automatizadas para un clon funcional de Jira, construida desde cero utilizando **Playwright** y **TypeScript**. 
+This repository contains a comprehensive suite of End-to-End (E2E) automated tests for a functional Jira clone, built from scratch using **Playwright** and **TypeScript**.
 
-El objetivo de este proyecto no es solo validar la interfaz de usuario, sino demostrar la aplicación de patrones de diseño de automatización, manejo de asincronía compleja y estabilidad en navegadores múltiples (Cross-Browser Testing).
+The primary goal of this project is not just to validate the UI, but to showcase the implementation of industry-standard automation design patterns, complex asynchronous handling, and true cross-browser stability.
 
-## 🚀 Tecnologías y Herramientas
-* **Framework E2E:** Playwright
-* **Lenguaje:** TypeScript
-* **Patrón de Arquitectura:** Page Object Model (POM)
-* **Integración Continua:** GitHub Actions (CI/CD)
+## 🚀 Technologies & Tools
+* **E2E Framework:** Playwright
+* **Language:** TypeScript
+* **Architecture Pattern:** Page Object Model (POM)
+* **Continuous Integration:** GitHub Actions (CI/CD)
 
-## 💡 Desafíos Técnicos Resueltos
-Automatizar una aplicación moderna construida en Angular presenta desafíos particulares de sincronización. En este proyecto se implementaron soluciones robustas para:
+## 💡 Technical Challenges Overcome
+Automating a modern web application built with Angular introduces specific synchronization hurdles. This project implements robust solutions for:
 
-* **Manejo de Rich Text Editors (Quill):** Técnicas avanzadas de inyección de texto (`page.evaluate` y tipeado secuencial) para bypassear la pérdida de eventos en Firefox y WebKit.
-* **Angular Virtual Scrollers:** Solución de problemas de *Actionability* y *Element outside of the viewport* utilizando clics nativos del DOM.
-* **Race Conditions y Auto-saves:** Control estricto de la asincronía y peticiones de red para asegurar que los cambios se guarden en la base de datos antes de las aserciones.
-* **Locators Dinámicos y Scoping:** Uso estricto de encadenamiento de locators para evitar falsos positivos en botones genéricos (ej. múltiples botones "Save" en un mismo modal).
-* **Cross-Browser Testing Real:** La suite se ejecuta de manera estable en **Chromium, Firefox y WebKit** sin usar `waitForTimeout` innecesarios.
+* **Rich Text Editor (Quill) Handling:** Advanced text injection techniques (DOM `evaluate` and sequential typing) to bypass event dropping issues specific to Firefox and WebKit.
+* **Angular Virtual Scrollers:** Resolving *Actionability* and *Element outside viewport* errors by leveraging native DOM click execution.
+* **Race Conditions & Auto-saves:** Strict control over asynchrony and network requests to ensure background database saves complete before executing assertions.
+* **Dynamic Locators & Scoping:** Strict use of locator chaining to prevent false positives with generic UI elements (e.g., handling multiple "Save" buttons within the same DOM scope).
+* **True Cross-Browser Testing:** The suite runs reliably across **Chromium, Firefox, and WebKit** without relying on flaky, hardcoded wait times.
 
-## 🏗️ Arquitectura (Page Object Model)
-El código está estructurado siguiendo principios DRY (Don't Repeat Yourself) y responsabilidad única.
-* `/pages`: Clases que encapsulan los selectores (Locators) y las acciones específicas de cada pantalla (`CreatePage`, `IssueDetailPage`, `BoardPage`).
-* `/specs`: Archivos de pruebas descriptivos que utilizan los Page Objects para ejecutar flujos de negocio.
-* `/utils`: Funciones helper genéricas (ej. selección aleatoria de dropdowns) compartidas entre todas las páginas.
+## 🏗️ Architecture (Page Object Model)
+The codebase is structured following DRY (Don't Repeat Yourself) principles and the Single Responsibility Principle.
+* `/pages`: Classes encapsulating locators and actions specific to each UI screen (`CreatePage`, `IssueDetailPage`, `BoardPage`).
+* `/specs`: Descriptive test files that orchestrate business flows using Page Objects.
+* `/utils`: Shared helper functions (e.g., randomized dropdown selection) accessible across multiple pages.
 
-## ⚙️ Cómo ejecutar el proyecto localmente
+## ⚙️ How to run locally
 
-1. Clonar este repositorio.
-2. Instalar las dependencias de Node:
+1. Clone this repository.
+2. Install Node dependencies:
    ```bash
    npm install
