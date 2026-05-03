@@ -39,11 +39,10 @@ test.describe('Jira Clone - Create Issue Window', () =>
 
         await expect(issueDetail.titleInput).toHaveValue(title);
         await expect(issueDetail.descBox).toHaveText(description);
-        await expect(issueDetail.priorityOptions).toHaveText(priority, { ignoreCase: true });
+        await expect(issueDetail.priorityOptions).toHaveText(priority, { useInnerText: true, ignoreCase: true });
         await expect(issueDetail.typeOptions).toContainText(type, { ignoreCase: true });
 
         const currentAssignees = await issueDetail.assigneesOptions.allInnerTexts();
-        //expect(currentAssignees).toContain(assignee);
         expect(currentAssignees.join(', ')).toContain(assignee);
     });
 

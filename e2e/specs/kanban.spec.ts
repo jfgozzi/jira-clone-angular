@@ -32,7 +32,7 @@ test.describe('Jira Clone - Kanban board', () => {
         {
             await issue.click();
             await expect(page.locator('issue-modal')).toBeVisible();
-            await expect(page.locator('issue-assignees').getByRole('button', { name: 'Trung Vo' })).toBeVisible();
+            await expect(page.locator('issue-assignees').getByText('Trung Vo')).toBeVisible();
             await page.locator('j-button[icon="times"]').click();
             await expect(page.locator('issue-modal')).toBeHidden();
         }

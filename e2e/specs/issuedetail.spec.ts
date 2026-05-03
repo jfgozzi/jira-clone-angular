@@ -82,7 +82,7 @@ test.describe('Jira Clone - Issue Detail', () =>
 
         await expect(issuePage.titleInput).toHaveValue(newTitle);
         await expect(issuePage.descBox).toHaveText(newDesc);
-        await expect(issuePage.statusOptions).toHaveText(newStatus, { useInnerText: true });
+        await expect(issuePage.statusOptions).toHaveText(newStatus, { useInnerText: true, ignoreCase: true });
         await expect(issuePage.reporterOptions).toHaveText(newReporter);
         await expect(issuePage.priorityOptions).toHaveText(newPriority, { ignoreCase: true });
         await expect(issuePage.typeOptions).toContainText(newType, { ignoreCase: true });

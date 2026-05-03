@@ -15,11 +15,12 @@ export async function selectRandomDropdownOption(page: Page, trigger: Locator, o
 {
     await trigger.click();
     const chosen = await getRandomElement(options);
-    const text = await chosen.innerText();
+    const text = await chosen.textContent();
+    const result = text ? text.trim() : '';
     await chosen.evaluate((nodo) => (nodo as HTMLElement).click());
 
     if (useEsc) await page.keyboard.press('Escape');
 
     await chosen.waitFor({ state: 'hidden' });
-    return text.trim();
+    return result;
 }
