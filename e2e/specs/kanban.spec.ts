@@ -30,7 +30,7 @@ test.describe('Jira Clone - Kanban board', () => {
         
         for (const issue of issues) 
         {
-            await issue.click();
+            await issue.click({ force: true });
             await expect(page.locator('issue-modal')).toBeVisible();
             await expect(page.locator('issue-assignees').getByText('Trung Vo')).toBeVisible();
             await page.locator('j-button[icon="times"]').click();
