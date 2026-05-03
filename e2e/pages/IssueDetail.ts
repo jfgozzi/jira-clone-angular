@@ -1,117 +1,139 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { getRandomElement } from '../utils/utils';
+import { selectRandomDropdownOption } from '../utils/utils';
 
-export class IssueDetailPage {
+export class IssueDetailPage 
+{
     readonly page: Page;
-    readonly issueModal: Locator;
+    readonly modal: Locator;
+
     readonly deleteButton: Locator;
-    readonly closeButton: Locator;
     readonly expandButton: Locator;
-    readonly boxComment: Locator;
-    readonly comments: Locator;
-    readonly saveComment: Locator;
-    readonly removeAssigneeButton: Locator;
-    readonly confirmDeleteModal: Locator;
-    readonly confirmDeleteButton: Locator;
-    
-    readonly typeOptions: Locator;
-    readonly statusOptions: Locator;
-    readonly reporterOptions: Locator;
-    readonly priorityOptions: Locator;
-    readonly assigneesOptions: Locator;
-    readonly addAssigneeButton: Locator;
+    readonly closeButton: Locator;
 
     readonly titleBox: Locator;
     readonly titleInput: Locator;
     readonly descBox: Locator;
     readonly descEditor: Locator;
 
+    readonly typeOptions: Locator;
+    readonly statusOptions: Locator;
+    readonly reporterOptions: Locator;
+    readonly assigneesOptions: Locator;
+    readonly removeAssigneeButton: Locator;
+    readonly addAssigneeButton: Locator;
+    readonly priorityOptions: Locator;
+
+    readonly commentBox: Locator;
+    readonly comments: Locator;
+    readonly descSaveButton: Locator;
+    readonly commentSaveButton: Locator;
+    readonly confirmDeleteModal: Locator;
+    readonly confirmDeleteButton: Locator;
     
-    constructor(page: Page) {
+    
+    constructor(page: Page) 
+    {
         this.page = page;
-        this.issueModal = page.locator('issue-modal');
+        this.modal = page.locator('issue-modal');
 
-        this.closeButton = page.locator('j-button[icon=times]');
-        this.deleteButton = page.locator('j-button[icon=trash]');
-        this.expandButton = page.locator('j-button[icon=expand]');
+        this.closeButton = this.modal.locator('j-button[icon=times]');
+        this.deleteButton = this.modal.locator('j-button[icon=trash]');
+        this.expandButton = this.modal.locator('j-button[icon=expand]');
 
-        this.typeOptions = this.issueModal.locator('issue-type j-button');
-        this.statusOptions = page.locator('issue-status j-button');
-        this.reporterOptions = page.locator('issue-reporter j-button');
-        this.priorityOptions = page.locator('issue-priority j-button');
-        this.assigneesOptions = page.locator('issue-assignees j-button');
-        this.removeAssigneeButton = page.locator('svg-icon[title="Remove user"]');
-        this.addAssigneeButton = page.getByText('Add Assignee');
+        this.titleBox = this.modal.locator('issue-title');
+        this.titleInput = this.modal.locator('issue-title textarea');
+        this.descBox = this.modal.locator('issue-description');
+        this.descEditor = this.modal.locator('issue-description .ql-editor');
 
-
-        this.comments = page.locator('issue-comments');
-        this.saveComment = page.getByText('Save').nth(0);
-        this.boxComment = page.getByPlaceholder('Add a comment');
-        this.confirmDeleteModal = page.locator('issue-delete-modal');
-        this.confirmDeleteButton = page.getByText('Delete', { exact: true });
+        this.typeOptions = this.modal.locator('issue-type j-button');
+        this.statusOptions = this.modal.locator('issue-status j-button');
+        this.reporterOptions = this.modal.locator('issue-reporter j-button');
+        this.assigneesOptions = this.modal.locator('issue-assignees j-button');
+        this.removeAssigneeButton = this.modal.locator('svg-icon[title="Remove user"]');
+        this.addAssigneeButton = this.modal.getByText('Add Assignee');
+        this.priorityOptions = this.modal.locator('issue-priority j-button');
 
 
-        this.titleBox = page.locator('issue-title');
-        this.titleInput = page.locator('issue-title textarea');
-        this.descBox = page.locator('issue-description');
-        this.descEditor = page.locator('issue-description .ql-editor');
+        this.commentBox = this.modal.getByPlaceholder('Add a comment');
+        this.comments = this.modal.locator('issue-comments');
+        this.descSaveButton = this.modal.locator('issue-description').getByText('Save');
+        this.commentSaveButton = this.modal.locator('issue-comments').getByText('Save');
+        this.confirmDeleteModal = this.page.locator('issue-delete-modal');
+        this.confirmDeleteButton = this.page.getByText('Delete', { exact: true });
+    }
+    
+
+    async chooseRandomDropdown(trigger: Locator): Promise<string> 
+    {
+        const options = this.page.locator('li.ant-dropdown-menu-item:visible');
+        const result = await selectRandomDropdownOption(this.page, trigger, options, false);
+        await this.page.waitForTimeout(1000); 
+        return result;
     }
 
-    async cambiarDropdownAlAzar(botonTrigger: Locator): Promise<string> {
-        await botonTrigger.click();
-        const opciones = this.page.locator('li.ant-dropdown-menu-item');
-        const opcionAlAzar = await getRandomElement(opciones);
-        await opcionAlAzar.click();
-        await opciones.first().waitFor({ state: 'hidden' });
-        await this.page.waitForTimeout(200);
-        return await botonTrigger.innerText();
-    }
 
-    async getIssueId() {
+    async getIssueId() 
+    {
         await this.typeOptions.waitFor({ state: 'visible' });
-        return await this.typeOptions.innerText();
+        const text = await this.typeOptions.innerText();
+        return text.trim(); 
     }
 
-    async putComment(comment: string) {
-        await this.boxComment.click();
-        await this.boxComment.fill(comment);
-        await this.saveComment.click();
+
+    async putComment(comment: string) 
+    {
+        await this.commentBox.click();
+        await this.commentBox.fill(comment);
+        await this.commentSaveButton.click();
     }
 
-    async removeAssignees() {
+    async removeAssignees() 
+    {
         let cantAssignees = await this.removeAssigneeButton.count();
         
         while (cantAssignees > 0) {
             await this.removeAssigneeButton.first().click();
             await expect(this.removeAssigneeButton).toHaveCount(cantAssignees - 1);
-            await this.page.waitForTimeout(150);
             cantAssignees = await this.removeAssigneeButton.count();
         }
     }
 
-    async agregarAsignadoAlAzar(): Promise<string> {
-        const cantidadAnterior = await this.assigneesOptions.count();
-        await this.addAssigneeButton.click();
-        const opciones = this.page.locator('li.ant-dropdown-menu-item');
-        const opcion = await getRandomElement(opciones);
-        await opcion.click();
-        await opciones.first().waitFor({ state: 'hidden' });
-        await expect(this.assigneesOptions).toHaveCount(cantidadAnterior + 1);
-        const todosLosAsignados = await this.assigneesOptions.allInnerTexts(); 
-        return todosLosAsignados.join(', ');
+    async assignAssignee(): Promise<string> 
+    {
+        const options = this.page.locator('li.ant-dropdown-menu-item:visible');
+        const trigger = this.assigneesOptions.or(this.addAssigneeButton);
+        const result = await selectRandomDropdownOption(this.page, trigger, options, true);
+        await this.page.waitForTimeout(1000); 
+        return result;
     }
 
-    async modificarTextos(nuevoTitulo: string, nuevaDesc: string) {
+    async modifyTexts(newTitle: string, newDesc: string) 
+    {
         await this.titleBox.click();
         await expect(this.titleInput).toBeVisible();
-        await this.titleInput.fill(nuevoTitulo);
-        await this.issueModal.click({ position: { x: 10, y: 10 } });
+        await this.titleInput.fill(newTitle);
+        await this.modal.click({ position: { x: 10, y: 10 } });
         await this.page.waitForTimeout(500);
         await this.descBox.click();
         await expect(this.descEditor).toBeVisible();
-        await this.descEditor.fill(nuevaDesc);
-        await this.saveComment.click();
+        await this.page.waitForTimeout(500); 
+
+        /*
+        await this.page.keyboard.press('ControlOrMeta+A');
+        await this.page.keyboard.press('Backspace');
+        await this.page.keyboard.insertText(newDesc);
+        */
+        
+        await this.descEditor.evaluate((node, injectedText) => {
+            node.innerHTML = `<p>${injectedText}</p>`;
+            node.dispatchEvent(new Event('input', { bubbles: true }));
+            node.dispatchEvent(new Event('change', { bubbles: true }));
+            node.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }));
+        }, newDesc);
+
         await this.page.waitForTimeout(500);
-        await expect(this.saveComment).toBeHidden();
+        await this.descSaveButton.click();
+        await this.page.waitForTimeout(500);
+        await expect(this.descSaveButton).toBeHidden();
     }
 }

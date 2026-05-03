@@ -1,14 +1,25 @@
-import { Locator } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
-export async function getRandomElement(locators: Locator): Promise<Locator> {
+export async function getRandomElement(locators: Locator): Promise<Locator> 
+{
     await locators.first().waitFor({ state: 'visible' });
+    const cant = await locators.count();
 
-    const cantidad = await locators.count();
-    
-    if (cantidad === 0) {
-        throw new Error('No se encontraron elementos para elegir al azar.');
-    }
-    
-    const indiceAleatorio = Math.floor(Math.random() * cantidad);
-    return locators.nth(indiceAleatorio);
+    if (cant === 0) throw new Error('No items were found.');
+
+    const idx = Math.floor(Math.random() * cant);
+    return locators.nth(idx);
+}
+
+export async function selectRandomDropdownOption(page: Page, trigger: Locator, options: Locator, useEsc: boolean = false): Promise<string> 
+{
+    await trigger.click();
+    const chosen = await getRandomElement(options);
+    const text = await chosen.innerText();
+    await chosen.evaluate((nodo) => (nodo as HTMLElement).click());
+
+    if (useEsc) await page.keyboard.press('Escape');
+
+    await chosen.waitFor({ state: 'hidden' });
+    return text.trim();
 }

@@ -1,20 +1,24 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
-export class SearchBarPage {
+export class SearchBarPage 
+{
     readonly page: Page;
-    readonly searchIcon: Locator; 
-    readonly searchInput: Locator;
-    readonly searchResults: Locator;
+    readonly input: Locator;
+    readonly resultsColumn: Locator;
+    readonly results: Locator;
 
     
-    constructor(page: Page) {
+    constructor(page: Page) 
+    {
         this.page = page;
-        this.searchIcon = page.locator('app-navbar-left i[aria-label="search"]');
-        this.searchInput = page.locator('input[placeholder="Search issues by summary, description..."]');
-        this.searchResults = page.locator('search-drawer');
+        this.input = page.locator('input[placeholder="Search issues by summary, description..."]');
+        this.resultsColumn = page.locator('search-drawer');
+        this.results = this.resultsColumn.locator('issue-results');
     }
 
-    async fillBox(text: string) {
-        await this.searchInput.pressSequentially(text, { delay: 100 });
+    
+    async fillBox(text: string) 
+    {
+        await this.input.pressSequentially(text, { delay: 100 });
     }
 }

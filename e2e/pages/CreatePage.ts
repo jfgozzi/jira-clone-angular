@@ -1,68 +1,62 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { getRandomElement } from '../utils/utils';
+import { selectRandomDropdownOption } from '../utils/utils';
 
-export class CreatePage {
+export class CreatePage 
+{
     readonly page: Page;
-    readonly createButton: Locator;
-    readonly issueTypeSelect: Locator;
-    readonly issuePrioritySelect: Locator;
+    readonly modal: Locator;
+    readonly typeSelect: Locator;
+    readonly prioritySelect: Locator;
     readonly shortSummaryBox: Locator;
     readonly descriptionBox: Locator;
     readonly assigneesSelect: Locator;
-    readonly saveButton: Locator;
+    readonly createIssueButton: Locator;
+    readonly cancelButton: Locator;
 
     
-    constructor(page: Page) {
+    constructor(page: Page) 
+    {
         this.page = page;
-        this.createButton = page.locator('app-navbar-left i[aria-label="plus"]');
-        this.issueTypeSelect = page.locator('issue-type-select');
-        this.issuePrioritySelect = page.locator('issue-priority-select');
-        this.shortSummaryBox = page.locator('input[formcontrolname="title"]');
-        this.descriptionBox = page.locator('quill-editor [contenteditable="true"]');
-        this.assigneesSelect = page.locator('issue-assignees-select');
-        this.saveButton = page.locator('button[type="submit"]');
+        this.modal = page.locator('add-issue-modal');
+        this.createIssueButton = this.modal.locator('button[type="submit"]');
+        this.cancelButton = this.modal.getByText('Cancel');
+        this.typeSelect = this.modal.locator('issue-type-select');
+        this.prioritySelect = this.modal.locator('issue-priority-select');
+        this.assigneesSelect = this.modal.locator('issue-assignees-select');
+        this.shortSummaryBox = this.modal.locator('input[formcontrolname="title"]');
+        this.descriptionBox = this.modal.locator('quill-editor [contenteditable="true"]');
     }
 
-    async chooseRandomDropdown(botonTrigger: Locator): Promise<string> {
-        await botonTrigger.click();
-        await this.page.waitForTimeout(200);
-        const opciones = this.page.locator('cdk-virtual-scroll-viewport nz-option-item:visible');
-        const opcionAlAzar = await getRandomElement(opciones);
-        await this.page.waitForTimeout(200);
-        const textoElegido = await opcionAlAzar.innerText();
-        await this.page.waitForTimeout(200);
-        await opcionAlAzar.click();
-        await this.page.waitForTimeout(200);
-        return textoElegido.trim(); 
-    }
 
-    async fillSummary(summary: string) {
+    async fillSummary(summary: string) 
+    {
         await this.shortSummaryBox.fill(summary);
+        await this.page.keyboard.press('Tab');
     }
 
-    async fillDescription(description: string) {
-        await this.descriptionBox.fill(description);
+    
+    async fillDescription(description: string) 
+    {
+        await this.descriptionBox.evaluate((node, injectedText) => {
+            node.innerHTML = `<p>${injectedText}</p>`;
+            node.dispatchEvent(new Event('input', { bubbles: true }));
+            node.dispatchEvent(new Event('change', { bubbles: true }));
+        }, description);
+        await this.page.keyboard.press('Tab');
+        await this.page.waitForTimeout(300);
     }
 
-    async assignAssignee(): Promise<string> {
-        /*
-        const cantidadAnterior = await this.assigneesOptions.count();
-        await this.addAssigneeButton.click();
-        const opciones = this.page.locator('li.ant-dropdown-menu-item');
-        const opcion = await getRandomElement(opciones);
-        await opcion.click();
-        await opciones.first().waitFor({ state: 'hidden' });
-        await expect(this.assigneesOptions).toHaveCount(cantidadAnterior + 1);
-        const todosLosAsignados = await this.assigneesOptions.allInnerTexts(); 
-        return todosLosAsignados.join(', ');
-        */
-        await this.assigneesSelect.click();
-        const opciones = this.page.locator('cdk-virtual-scroll-viewport nz-option-item:visible');
-        const opcion = await getRandomElement(opciones);
-        const textoElegido = await opcion.innerText();
-        await opcion.click();
-        await this.page.waitForTimeout(200);
-        await this.page.keyboard.press('Escape');
-        return textoElegido.trim();
+
+    async chooseRandomDropdown(trigger: Locator): Promise<string> 
+    {
+        const options= this.page.locator('cdk-virtual-scroll-viewport nz-option-item:visible');
+        return selectRandomDropdownOption(this.page, trigger, options, false);
+    }
+
+
+    async assignAssignee(): Promise<string> 
+    {
+        const options = this.page.locator('cdk-virtual-scroll-viewport nz-option-item:visible');
+        return selectRandomDropdownOption(this.page, this.assigneesSelect, options, true);
     }
 }
