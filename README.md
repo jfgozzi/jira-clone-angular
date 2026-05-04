@@ -2,7 +2,6 @@
 # 🧪 E2E Test Automation - Jira Clone (Playwright)
 
 
-<img width="800" height="582" alt="resultstestsvideo-ezgif com-video-to-gif-converter-2" src="https://github.com/user-attachments/assets/efc723c3-2a48-40d0-8e5d-dcc44b32db66" />
 
 
 This repository contains a comprehensive suite of End-to-End (E2E) automated tests for a functional Jira clone, built from scratch using **Playwright** and **TypeScript**.
@@ -51,6 +50,7 @@ The codebase is structured following DRY (Don't Repeat Yourself) principles and 
    ```
 
 ## 📊 Reporting
+<img width="800" height="582" alt="resultstestsvideo-ezgif com-video-to-gif-converter-2" src="https://github.com/user-attachments/assets/efc723c3-2a48-40d0-8e5d-dcc44b32db66" />
 Upon execution, Playwright generates an interactive HTML report featuring screenshots, video recordings, and a Trace Viewer for deep-dive debugging:
 ```bash
 npx playwright show-report
