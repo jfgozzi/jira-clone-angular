@@ -1,12 +1,11 @@
 [![Playwright Tests](https://github.com/jfgozzi/jira-clone-angular/actions/workflows/playwright.yml/badge.svg)](https://github.com/jfgozzi/jira-clone-angular/actions/workflows/playwright.yml)
 # 🧪 E2E Test Automation - Jira Clone (Playwright)
 
-
-
-
 This repository contains a comprehensive suite of End-to-End (E2E) automated tests for a functional Jira clone, built from scratch using **Playwright** and **TypeScript**.
 
 The primary goal of this project is not just to validate the UI, but to showcase the implementation of industry-standard automation design patterns, complex asynchronous handling, and true cross-browser stability.
+
+<img width="1280" height="853" alt="finalvideo-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/fc58e842-e623-4cc0-a712-50f5c8c5242c" />
 
 ## 🚀 Technologies & Tools
 * **E2E Framework:** Playwright
