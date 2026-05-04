@@ -2,7 +2,7 @@
 # 🧪 E2E Test Automation - Jira Clone (Playwright)
 
 
-<img width="600" height="800" alt="resultstestsvideo-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/3adb7478-fca4-4c44-afed-240f6eb31ecb" />
+<img width="600" height="400" alt="resultstestsvideo-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/3adb7478-fca4-4c44-afed-240f6eb31ecb" />
 
 
 
